@@ -4,6 +4,8 @@
 import requests
 from common.utils import gen_headers
 from common.config import conf
+from common.store import table_map
+from common.handler import response_handler
 from tasks.tac.service import tac_service
 
 app_id = conf.get('tac', 'app_id')
@@ -28,7 +30,7 @@ class TacTask:
         res = requests.post(feedback_url, headers=headers, data={
             'data': data
         })
-        # print(res.text)
+        response_handler.handle(res, data, '', table_map['tac_feedback'])
 
     # 发送维修通讯案例
     def send_repair_bulletin(self):

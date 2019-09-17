@@ -4,7 +4,6 @@
 from tasks.tac.db import tac_cursor
 from common.utils import get_day_time_range
 
-
 class TacService:
     def __init__(self):
         pass
@@ -21,6 +20,7 @@ class TacService:
     def get_feedback(self, timestamp):
         data = []
         day_time_range = get_day_time_range(timestamp)
+        print(day_time_range)
         tac_cursor.execute(self.feedback_sql, day_time_range)
         for row in tac_cursor:
             item = {'tisId': row[0], 'feedbackTime': row[1]}

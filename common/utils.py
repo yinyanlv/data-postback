@@ -11,8 +11,8 @@ from pymongo import MongoClient
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 
-def gen_md5(str):
-    md5 = hashlib.md5(str.encode(encoding='utf-8'))
+def gen_md5(text):
+    md5 = hashlib.md5(text.encode(encoding='utf-8'))
     return md5.hexdigest()
 
 
@@ -39,9 +39,9 @@ def get_connection(driver, host, port, database, username, password):
         return conn
     elif driver == 'MongoDb':
         if username == '' or password == '':
-            conn_str = 'mongodb://{0}/{1}'.format(server, database, username, password)
+            conn_str = 'mongodb://{0}/'.format(server)
         else:
-            conn_str = 'mongodb://{2}:{3}@{0}/{1}'.format(server, database, username, password)
+            conn_str = 'mongodb://{1}:{2}@{0}/'.format(server, username, password)
         print('{} connect string: {}'.format(driver, conn_str))
         conn = MongoClient(conn_str)
         return conn
@@ -57,3 +57,4 @@ def get_day_time_range(timestamp):
         'begin': '{} 00:00:00'.format(day),
         'end': '{} 23:59:59'.format(day)
     }
+

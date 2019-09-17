@@ -25,11 +25,10 @@ class TacTask:
     def send_feedback(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = tac_service.get_feedback(timestamp)
-        print(headers)
         res = requests.post(feedback_url, headers=headers, data={
             'data': data
         })
-        print(res.text)
+        # print(res.text)
 
     # 发送维修通讯案例
     def send_repair_bulletin(self):

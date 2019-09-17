@@ -6,12 +6,13 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from common.config import conf
 from common.utils import current_milli_time
 from tasks.tac.task import tac_task
+from common.db import app_conn
 
 timestamp = current_milli_time()
 tac_task.send_feedback(timestamp)
 
 # def job():
-#     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+#     print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 #
 #
 # scheduler = BlockingScheduler()

@@ -10,7 +10,12 @@ import pyodbc
 import cx_Oracle
 from pymongo import MongoClient
 
+
 current_milli_time = lambda: int(round(time.time() * 1000))
+
+
+def lower_first_letter(words):
+    return words[0].lower() + words[1:]
 
 
 def gen_md5(text):
@@ -62,7 +67,7 @@ def get_day_time_range(timestamp):
     temp = (timestamp - 1000 * 60 * 10) // 1000
     day = datetime.fromtimestamp(temp).strftime('%Y-%m-%d')
     return {
-        'begin': '2018-11-16 00:00:00',
+        'begin': '2019-08-16 00:00:00',
         'end': '2019-08-20 00:00:00'
     }
     # return {

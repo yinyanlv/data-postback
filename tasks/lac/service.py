@@ -3,7 +3,7 @@
 
 from os import path
 from tasks.lac.db import lac_cursor
-from common.utils import get_day_time_range, read_text, rebuild_data
+from common.utils import get_day_time_range, read_text, rebuild_data, lower_first_letter
 
 
 class LacService:
@@ -14,7 +14,9 @@ class LacService:
     def get_question(self, timestamp):
         day_time_range = get_day_time_range(timestamp)
         lac_cursor.execute(self.question_sql, [day_time_range['begin'], day_time_range['end']])
-        fields = [desc_row[0] for desc_row in lac_cursor.description]
+        fields = [lower_first_letter(desc_row[0]) for desc_row in lac_cursor.description]
+        print(len(fields))
+        print(fields)
         data = rebuild_data(lac_cursor, fields)
         return data
 

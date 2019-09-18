@@ -58,3 +58,9 @@ def get_day_time_range(timestamp):
         'end': '{} 23:59:59'.format(day)
     }
 
+
+def read_text(file_path):
+    fd = open(file_path, mode='r', encoding='utf-8')
+    result = fd.read().encode('utf-8')
+    fd.close()
+    return result

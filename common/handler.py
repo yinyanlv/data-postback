@@ -9,7 +9,7 @@ class ResponseHandler:
     def __init__(self):
         pass
 
-    def handle(self, response, original_data, filter_key, table_name):
+    def handle(self, url, response, original_data, filter_key, table_name):
         print(response.json())
         if response.status_code == 200:
             res_data = response.json()
@@ -31,14 +31,14 @@ class ResponseHandler:
             elif status_code == 201:
                 result = self.filter_data(original_data, res_data, filter_key)
                 mongo_store.save(table_name, result)
-                Error(response.text).save()
+                Error(response.text, url).save()
                 pass
             else:
                 mongo_store.save(table_name, original_data)
-                Error(response.text).save()
+                Error(response.text, url).save()
         else:
             mongo_store.save(table_name, original_data)
-            Error(response.text).save()
+            Error(response.text, url).save()
 
     def filter_data(self, original_data, res_data=[], filter_key=''):
         result = []

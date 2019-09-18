@@ -27,13 +27,14 @@ class TacTask:
     def send_feedback(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = tac_service.get_feedback(timestamp)
+        print(data)
         res = requests.post(feedback_url, headers=headers, data={
             'data': data
         })
-        response_handler.handle(res, data, '', table_map['tac_feedback'])
+        response_handler.handle(feedback_url, res, data, '', table_map['tac_feedback'])
 
     # 发送维修通讯案例
-    def send_repair_bulletin(self):
+    def send_repair(self):
         pass
 
 

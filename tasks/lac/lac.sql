@@ -1,0 +1,42 @@
+select LAC_Question.AutoId,
+LACQuestionCode,
+replace(replace(replace(LACQuestionNote,char(10),' '),char(13),' '),char(9),' ') as LACQuestionNote,
+DeliverDate,
+ReceiveDate,
+DealerCode,
+DealerDescription,
+DeliverNumber,
+ResponsiblePerson,
+ResponsiblePersonCallNumber,
+WarehouseCode,
+LAC_Warehouse.Description as WarehouseName,
+LACQuestionStateCode,
+LAC_LACQuestionState.description as LACQuestionStateName,
+LACQuestionNoteStateCode,
+LAC_LACQuestionNoteState.Description as LACQuestionNoteStateName,
+LACQuestionStateDate,
+TreatmentOpinionTypeCode,
+LAC_TreatmentOpinionType.Description as TreatmentOpinionTypeName,
+LAC_Question.CreateDate,
+LAC_Question.CreatedBy,
+SubmitDate,
+SubmitYear,
+SubmitMonth,
+ThatMonthWhichWeeks,
+ThatYearWhichWeeks,
+TreatmentOpinionDate,
+FirstReplyDate,
+FirstRepliedBy,
+LastReplyDate,
+LastRepliedBy,
+CloseDate,
+LACLastVisitTime,
+DealerLastVisitTime,
+LAC_Question.IsEnabled,
+BrandCode
+from LAC_Question
+left join LAC_LACQuestionState on LAC_Question.LACQuestionStateCode=LAC_LACQuestionState.Code
+left join LAC_LACQuestionNoteState on LAC_Question.LACQuestionNoteStateCode=LAC_LACQuestionNoteState.code
+left join LAC_Warehouse on LAC_Warehouse.Code=LAC_Question.WarehouseCode
+left join LAC_TreatmentOpinionType on LAC_TreatmentOpinionType.Code=LAC_Question.TreatmentOpinionTypeCode
+where LAC_Question.CreateDate between :begin and :end

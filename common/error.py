@@ -6,12 +6,10 @@ from common.store import mongo_store
 
 
 class Error:
-    def __init__(self, msg):
+    def __init__(self, message, url=''):
+        self.url = url
         self.datetime = datetime.now()
-        self.error = msg
+        self.message = message
 
     def save(self):
-        mongo_store.save_error({
-            'datetime': self.datetime,
-            'error': self.error
-        })
+        mongo_store.save_error(self.__dict__)

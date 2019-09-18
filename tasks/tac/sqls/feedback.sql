@@ -9,7 +9,7 @@ SELECT F.*,
        V.REPAIR_DATE                        AS "repairDate",
        V.TRIP_DISTANCE                      AS "mileage",
        NVL(AQ.ATTACHMENT_QTY, 0)            AS "annexNum",
-       NVL(TO_NCHAR(RC.REPLY_CONTENTS), '') AS "historyContent"
+       NVL(RC.REPLY_CONTENTS, '') AS "historyContent"
 FROM (SELECT F.ID                                    AS "tisId",
              UG.NAME                                 AS "dealerName",
              UG.CODE                                 AS "dealerCode",
@@ -43,7 +43,7 @@ FROM (SELECT F.ID                                    AS "tisId",
        JOIN T_FEEDBACK_VEHICLE V ON V.FEEDBACK_ID = F."tisId"
        LEFT JOIN (SELECT FEEDBACK_ID, COUNT(1) ATTACHMENT_QTY FROM T_FEEDBACK_ATTACHMENT GROUP BY FEEDBACK_ID) AQ
          ON AQ.FEEDBACK_ID = F."tisId"
-       LEFT JOIN (SELECT FEEDBACK_ID, SUBSTR(WMSYS.WM_CONCAT(CASE FROM_SYS WHEN 'TAC' THEN '4S回复人' ELSE '主机厂回复人' END
+       LEFT JOIN (SELECT FEEDBACK_ID, TO_NCHAR(SUBSTR(WMSYS.WM_CONCAT(CASE FROM_SYS WHEN 'TAC' THEN '4S回复人' ELSE '主机厂回复人' END
                                                                || NAME
                                                                || CASE NVL(TELEPHONE, 'NULL')
                                                                     WHEN 'NULL' THEN ''
@@ -53,7 +53,7 @@ FROM (SELECT F.ID                                    AS "tisId",
                                                                || ':'
                                                                || CONTENT
                                                                || '\n'
-                                                 ), 1, 2000) REPLY_CONTENTS
+                                                 ), 1, 2000)) REPLY_CONTENTS
                   FROM (SELECT FR.FEEDBACK_ID, FR.FROM_SYS, FR.CONTENT, U.NAME, U.TELEPHONE
                         FROM T_FEEDBACK_REPLY FR
                                LEFT JOIN T_USER U ON FR.CREATED_BY = U.ID

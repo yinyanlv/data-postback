@@ -1,7 +1,7 @@
 SELECT Q.*,
        NVL(AQ.ATTACHMENT_QTY, 0) AS "attachmentsNum",
-       TO_NCHAR(NVL(RB.BULLETINS, ''))     AS "associatedCommunication",
-       TO_NCHAR(RC.REPLY_CONTENTS)         AS "historyContent"
+       NVL(RB.BULLETINS, '')     AS "associatedCommunication",
+       RC.REPLY_CONTENTS         AS "historyContent"
 FROM (SELECT R.*
       FROM (SELECT Q.ID                                                                 AS "helpCodeId",
                    Q.CONTACT                                                            AS "maintenanceSupervisor",
@@ -43,19 +43,19 @@ FROM (SELECT R.*
               AND Q.IS_CLOSE = 0) R) Q
        LEFT JOIN (SELECT QUESTION_ID, COUNT(1) ATTACHMENT_QTY FROM T_QUESTION_ATTACHMENT GROUP BY QUESTION_ID) AQ
          ON AQ.QUESTION_ID = Q."helpCodeId"
-       LEFT JOIN (SELECT LNK_QUESTION_ID, SUBSTR(WMSYS.WM_CONCAT(RB_ID || '(' || TO_CHAR(STATUS_NAME) || ')'),1,2000) BULLETINS
+       LEFT JOIN (SELECT LNK_QUESTION_ID, TO_NCHAR(SUBSTR(WMSYS.WM_CONCAT(RB_ID || '(' || TO_CHAR(STATUS_NAME) || ')'),1,2000)) BULLETINS
                   FROM (SELECT LNK_Q.LNK_QUESTION_ID, RB.ID RB_ID, RB_S.NAME STATUS_NAME
                         FROM T_RB RB
                                JOIN T_RB_STATUS RB_S ON RB.STATUS = RB_S.ID
                                JOIN T_RB_LNK_QUESTION LNK_Q ON RB.ID = LNK_Q.RB_ID
                         ORDER BY RB_S.LNK_SORT, RB.PUBLISHED_DATE DESC)
                   GROUP BY LNK_QUESTION_ID)RB ON RB.LNK_QUESTION_ID = Q."helpCodeId"
-       LEFT JOIN (SELECT QUESTION_ID, SUBSTR(WMSYS.WM_CONCAT(CASE FROM_SYS WHEN 'TAC' THEN '4S回复人' ELSE '主机厂回复人' END
+       LEFT JOIN (SELECT QUESTION_ID, TO_NCHAR(SUBSTR(WMSYS.WM_CONCAT(CASE FROM_SYS WHEN 'TAC' THEN '4S回复人' ELSE '主机厂回复人' END
                                                         || NAME
                                                         || CASE NVL(TELEPHONE, 'NULL')
                                                              WHEN 'NULL' THEN ''
                                                              ELSE '(' || TELEPHONE || ')' END || ':'
-                                                        || CONTENT || '\n'),1,2000) REPLY_CONTENTS
+                                                        || CONTENT || '\n'),1,2000)) REPLY_CONTENTS
                   FROM (SELECT QR.QUESTION_ID, QR.FROM_SYS, QR.CONTENT, U.NAME, U.TELEPHONE
                         FROM T_QUESTION_REPLY QR
                                LEFT JOIN T_USER U ON QR.REPLIER_ID = U.ID

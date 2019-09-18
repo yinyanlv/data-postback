@@ -10,7 +10,7 @@ class ResponseHandler:
         pass
 
     def handle(self, response, original_data, filter_key, table_name):
-        print(response.status_code)
+        print('{}: {}'.format(response.status_code, response.url))
         if response.status_code == 200:
             res_data = response.json()
             print(res_data)

@@ -9,10 +9,11 @@ class ResponseHandler:
     def __init__(self):
         pass
 
-    def handle(self, url, response, original_data, filter_key, table_name):
-        print(response.json())
+    def handle(self, response, original_data, filter_key, table_name):
+        print(response.status_code)
         if response.status_code == 200:
             res_data = response.json()
+            print(res_data)
             status_code = res_data['status']
             """
                   200 成功
@@ -29,19 +30,26 @@ class ResponseHandler:
             if status_code == 200:
                 pass
             elif status_code == 201:
-                result = self.filter_data(original_data, res_data, filter_key)
+                result = self.filter_data(original_data, res_data['response'], filter_key)
                 mongo_store.save(table_name, result)
-                Error(response.text, url).save()
+                Error(response.text, response.url).save()
                 pass
             else:
                 mongo_store.save(table_name, original_data)
-                Error(response.text, url).save()
+                Error(response.text, response.url).save()
         else:
             mongo_store.save(table_name, original_data)
-            Error(response.text, url).save()
+            Error(response.text, response.url).save()
 
-    def filter_data(self, original_data, res_data=[], filter_key=''):
+    def filter_data(self, original_data, res_data, filter_key=''):
         result = []
+        failed_list = []
+        for item in res_data:
+            if item['status'] != 'success' and filter_key != '':
+                failed_list.append(item[filter_key])
+        for item in original_data:
+            if item[filter_key] in failed_list:
+                result.append(item)
         return result
 
 

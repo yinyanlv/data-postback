@@ -20,22 +20,31 @@ class TacTask:
         pass
 
     # 发送技术求援
-    def send_question(self):
-        pass
+    def send_question(self, timestamp):
+        headers = gen_headers(app_id, secret_key, timestamp)
+        data = tac_service.get_question(timestamp)
+        res = requests.post(question_url, headers=headers, data={
+            'data': data
+        })
+        response_handler.handle(res, data, 'helpCodeId', table_map['tac_question'])
 
     # 发送信息反馈
     def send_feedback(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = tac_service.get_feedback(timestamp)
-        print(data)
         res = requests.post(feedback_url, headers=headers, data={
             'data': data
         })
-        response_handler.handle(feedback_url, res, data, '', table_map['tac_feedback'])
+        response_handler.handle(res, data, 'tisId', table_map['tac_feedback'])
 
     # 发送维修通讯案例
-    def send_repair(self):
-        pass
+    def send_repair(self, timestamp):
+        headers = gen_headers(app_id, secret_key, timestamp)
+        data = tac_service.get_repair(timestamp)
+        res = requests.post(repair_url, headers=headers, data={
+            'data': data
+        })
+        response_handler.handle(res, data, 'tisMid', table_map['tac_repair'])
 
 
 tac_task = TacTask()

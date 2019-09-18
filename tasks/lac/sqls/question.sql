@@ -39,4 +39,4 @@ left join LAC_LACQuestionState on LAC_Question.LACQuestionStateCode=LAC_LACQuest
 left join LAC_LACQuestionNoteState on LAC_Question.LACQuestionNoteStateCode=LAC_LACQuestionNoteState.code
 left join LAC_Warehouse on LAC_Warehouse.Code=LAC_Question.WarehouseCode
 left join LAC_TreatmentOpinionType on LAC_TreatmentOpinionType.Code=LAC_Question.TreatmentOpinionTypeCode
-where LAC_Question.CreateDate between :begin and :end
+where LAC_Question.CreateDate between ? and ?

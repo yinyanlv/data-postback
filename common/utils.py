@@ -2,6 +2,8 @@
 # -*- coding: UTF-8 -*-
 
 import time
+import traceback
+import sys
 from datetime import datetime
 import hashlib
 import pyodbc
@@ -14,6 +16,11 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 def gen_md5(text):
     md5 = hashlib.md5(text.encode(encoding='utf-8'))
     return md5.hexdigest()
+
+
+def get_error_str():
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    return str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
 
 
 def gen_headers(app_id, secret_key, timestamp):
@@ -33,7 +40,8 @@ def get_connection(driver, host, port, database, username, password):
         conn = cx_Oracle.connect(conn_str)
         return conn
     elif driver == 'SQL Server':
-        conn_str = 'DRIVER={{{0}}};SERVER={1};DATABASE={2};UID={3};PWD={4}'.format(driver, server, database, username, password)
+        conn_str = 'DRIVER={{{0}}};SERVER={1};DATABASE={2};UID={3};PWD={4}'.format(driver, server, database, username,
+                                                                                   password)
         print('{} connect string: {}'.format(driver, conn_str))
         conn = pyodbc.connect(conn_str)
         return conn
@@ -54,13 +62,27 @@ def get_day_time_range(timestamp):
     temp = (timestamp - 1000 * 60 * 10) // 1000
     day = datetime.fromtimestamp(temp).strftime('%Y-%m-%d')
     return {
-        'begin': '{} 00:00:00'.format(day),
-        'end': '{} 23:59:59'.format(day)
+        'begin': '2018-11-16 00:00:00',
+        'end': '2019-08-20 00:00:00'
     }
+    # return {
+    #     'begin': '{} 00:00:00'.format(day),
+    #     'end': '{} 23:59:59'.format(day)
+    # }
 
 
 def read_text(file_path):
     fd = open(file_path, mode='r', encoding='utf-8')
-    result = fd.read().encode('utf-8')
+    result = fd.read()
     fd.close()
     return result
+
+
+def rebuild_data(cursor, fields):
+    data = []
+    for row in cursor:
+        item = {}
+        for i, field in enumerate(fields):
+            item[field] = row[i]
+        data.append(item)
+    return data

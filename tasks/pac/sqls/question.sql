@@ -46,4 +46,4 @@ VIN
 from Question
 left join QuestionType on Question.QuestionType=QuestionType.Code
 left join QuestionState on Question.QuestionState=QuestionState.QuestionState
-where Question.CreateDate between :begin and :end
+where Question.CreateDate between ? and ?

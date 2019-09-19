@@ -1,5 +1,6 @@
 ## pac sql
-缺causeContent，isDeleted，status字段
+缺isDeleted，status字段
+字段CauseId -> CauseContent
 
 ## lac sql
 字段CloseDate -> ClosDate

@@ -21,7 +21,7 @@ def init_conf():
 
 
 def get_file_path(filename):
-    return os.path.abspath(os.path.join(os.getcwd(), 'conf', filename))
+    return os.path.abspath(os.path.join(__file__, '../../conf', filename))
 
 
 init_conf()

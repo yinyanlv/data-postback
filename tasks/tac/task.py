@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import requests
-from common.utils import gen_headers
+from common.utils import gen_headers, get_post_json_data
 from common.config import conf
 from common.store import table_map
 from common.handler import response_handler
@@ -23,27 +23,21 @@ class TacTask:
     def send_question(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = tac_service.get_question(timestamp)
-        res = requests.post(question_url, headers=headers, data={
-            'data': data
-        })
+        res = requests.post(question_url, headers=headers, data=get_post_json_data(data))
         response_handler.handle(res, data, 'helpCodeId', table_map['tac_question'])
 
     # 发送信息反馈
     def send_feedback(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = tac_service.get_feedback(timestamp)
-        res = requests.post(feedback_url, headers=headers, data={
-            'data': data
-        })
+        res = requests.post(feedback_url, headers=headers, data=get_post_json_data(data))
         response_handler.handle(res, data, 'tisId', table_map['tac_feedback'])
 
     # 发送维修通讯案例
     def send_repair(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = tac_service.get_repair(timestamp)
-        res = requests.post(repair_url, headers=headers, data={
-            'data': data
-        })
+        res = requests.post(repair_url, headers=headers, data=get_post_json_data(data))
         response_handler.handle(res, data, 'tisMid', table_map['tac_repair'])
 
 

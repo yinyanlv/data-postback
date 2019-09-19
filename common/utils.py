@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
+import json
 import time
 import traceback
 import sys
@@ -30,11 +31,24 @@ def get_error_str():
 
 def gen_headers(app_id, secret_key, timestamp):
     headers = {
+        'Content-Type': 'application/json',
         'AppId': app_id,
         'Token': gen_md5(app_id + str(timestamp) + secret_key),
         'Times': str(timestamp)
     }
     return headers
+
+
+def datetime_handler(x):
+    if isinstance(x, datetime):
+        return x.isoformat()
+    raise TypeError("Unknown type")
+
+
+def get_post_json_data(data):
+    return json.dumps({
+        'data': data
+    }, default=datetime_handler)
 
 
 def get_connection(driver, host, port, database, username, password):

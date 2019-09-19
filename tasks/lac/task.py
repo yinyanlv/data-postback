@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import requests
-from common.utils import gen_headers
+from common.utils import gen_headers, get_post_json_data
 from common.config import conf
 from common.store import table_map
 from common.handler import response_handler
@@ -20,9 +20,7 @@ class LacTask:
     def send_question(self, timestamp):
         headers = gen_headers(app_id, secret_key, timestamp)
         data = lac_service.get_question(timestamp)
-        res = requests.post(question_url, headers=headers, data={
-            'data': data
-        })
+        res = requests.post(question_url, headers=headers, data=get_post_json_data(data))
         response_handler.handle(res, data, 'autoId', table_map['lac'])
 
 

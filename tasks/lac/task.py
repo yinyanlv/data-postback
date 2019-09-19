@@ -18,8 +18,10 @@ class LacTask:
         pass
 
     def send_question(self, timestamp):
-        headers = gen_headers(app_id, secret_key, timestamp)
         data = lac_service.get_question(timestamp)
+        if len(data) == 0:
+            return
+        headers = gen_headers(app_id, secret_key, timestamp)
         res = requests.post(question_url, headers=headers, data=get_post_json_data(data))
         response_handler.handle(res, data, 'autoId', table_map['lac'])
 

@@ -53,7 +53,6 @@ class MongoStore:
         coll = self.coll_map.get(coll_name)
         if coll:
             if len(data) != 0:
-                print(data)
                 _result = coll.insert_many(data)
         else:
             print('Can not find collection {} in mongodb!', coll_name)

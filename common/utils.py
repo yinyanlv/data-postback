@@ -81,13 +81,9 @@ def get_day_time_range(timestamp):
     temp = (timestamp - 1000 * 60 * 10) // 1000
     day = datetime.fromtimestamp(temp).strftime('%Y-%m-%d')
     return {
-        'begin': '2019-08-16 00:00:00',
-        'end': '2019-08-20 00:00:00'
+        'begin': '{} 00:00:00'.format(day),
+        'end': '{} 23:59:59'.format(day)
     }
-    # return {
-    #     'begin': '{} 00:00:00'.format(day),
-    #     'end': '{} 23:59:59'.format(day)
-    # }
 
 
 def read_text(file_path):

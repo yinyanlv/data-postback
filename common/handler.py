@@ -32,7 +32,6 @@ class ResponseHandler:
                 result = self.filter_data(original_data, res_data['response'], filter_key)
                 mongo_store.save(table_name, result)
                 Error(response.text, response.url).save()
-                pass
             else:
                 mongo_store.save(table_name, original_data)
                 Error(response.text, response.url).save()

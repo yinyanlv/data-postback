@@ -13,7 +13,7 @@ class PacService:
 
     def get_question(self, timestamp):
         day_time_range = get_day_time_range(timestamp)
-        pac_cursor.execute(self.question_sql, [day_time_range['begin'], day_time_range['end']])
+        pac_cursor.execute(self.question_sql.decode('utf-8'), day_time_range['begin'], day_time_range['end'])
         fields = [lower_first_letter(desc_row[0]) for desc_row in pac_cursor.description]
         data = rebuild_data(pac_cursor, fields)
         return data

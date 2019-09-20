@@ -1,4 +1,5 @@
 SELECT F.*,
+
        V.VIN                                AS "vin",
        V.MODEL_PLATFORM_NAME                AS "carPlatform",
        V.VSN                                AS "vsn",

@@ -55,7 +55,7 @@ class MongoStore:
             if len(data) != 0:
                 _result = coll.insert_many(data)
         else:
-            print('Can not find collection {} in mongodb!', coll_name)
+            print('Can not find collection {} in mongodb!'.format(coll_name))
 
     def save_error(self, error):
         _result = self.error_table.insert_one(error)

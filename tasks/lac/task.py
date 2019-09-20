@@ -20,6 +20,7 @@ class LacTask:
     def send_question(self, timestamp):
         data = lac_service.get_question(timestamp)
         if len(data) == 0:
+            print('LAC未发现数据')
             return
         headers = gen_headers(app_id, secret_key, timestamp)
         res = requests.post(question_url, headers=headers, data=get_post_json_data(data))

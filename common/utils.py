@@ -41,7 +41,8 @@ def gen_headers(app_id, secret_key, timestamp):
 
 def datetime_handler(x):
     if isinstance(x, datetime):
-        return x.isoformat()
+        dt, _, _ = x.isoformat().partition('.')
+        return dt
     raise TypeError("Unknown type")
 
 
@@ -58,7 +59,8 @@ def get_connection(driver, host, port, database, username, password):
         print('{} connect string: {}'.format(driver, conn_str))
         conn = cx_Oracle.connect(conn_str)
         return conn
-    elif driver == 'SQL Server':
+    elif 'SQL Server' in driver:
+        server = host if port == '' else host + ',' + port
         conn_str = 'DRIVER={{{0}}};SERVER={1};DATABASE={2};UID={3};PWD={4}'.format(driver, server, database, username,
                                                                                    password)
         print('{} connect string: {}'.format(driver, conn_str))
@@ -88,7 +90,7 @@ def get_day_time_range(timestamp):
 
 def read_text(file_path):
     fd = open(file_path, mode='r', encoding='utf-8')
-    result = fd.read()
+    result = fd.read().encode('utf-8')
     fd.close()
     return result
 

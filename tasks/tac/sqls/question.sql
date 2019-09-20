@@ -38,8 +38,8 @@ FROM (SELECT R.*
                    LEFT JOIN T_QUESTION_LEVEL QL ON Q.LEVEL_ID = QL.ID
                    LEFT JOIN T_USER_GROUP UG ON Q.USER_GROUP_ID = UG.ID
             WHERE (Q.STATUS = 'FINISHED' OR Q.STATUS = 'REPLIED')
-              AND Q.RESOLVE_DATE >= TO_DATE(:begin, 'yyyy-mm-dd hh24:mi:ss')
-              AND Q.RESOLVE_DATE <= TO_DATE(:end, 'yyyy-mm-dd hh24:mi:ss')
+              AND Q.MODIFIED_DATE >= TO_DATE(:begin, 'yyyy-mm-dd hh24:mi:ss')
+              AND Q.MODIFIED_DATE <= TO_DATE(:end, 'yyyy-mm-dd hh24:mi:ss')
               AND Q.IS_CLOSE = 0) R) Q
        LEFT JOIN (SELECT QUESTION_ID, COUNT(1) ATTACHMENT_QTY FROM T_QUESTION_ATTACHMENT GROUP BY QUESTION_ID) AQ
          ON AQ.QUESTION_ID = Q."helpCodeId"
@@ -61,7 +61,7 @@ FROM (SELECT R.*
                                LEFT JOIN T_USER U ON QR.REPLIER_ID = U.ID
                                LEFT JOIN T_QUESTION Q2 ON Q2.ID = QR.QUESTION_ID
                         WHERE QR.CONTENT_LENGTH < 500
-                          AND Q2.RESOLVE_DATE >= TO_DATE(:begin, 'yyyy-mm-dd hh24:mi:ss')
-                          AND Q2.RESOLVE_DATE <= TO_DATE(:end, 'yyyy-mm-dd hh24:mi:ss')
+                          AND Q2.MODIFIED_DATE >= TO_DATE(:begin, 'yyyy-mm-dd hh24:mi:ss')
+                          AND Q2.MODIFIED_DATE <= TO_DATE(:end, 'yyyy-mm-dd hh24:mi:ss')
                         ORDER BY QR.CREATED_DATE DESC)
                   GROUP BY QUESTION_ID)RC ON RC.QUESTION_ID = Q."helpCodeId"

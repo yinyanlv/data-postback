@@ -23,6 +23,7 @@ class TacTask:
     def send_question(self, timestamp):
         data = tac_service.get_question(timestamp)
         if len(data) == 0:
+            print('TAC技术求援未发现数据')
             return
         headers = gen_headers(app_id, secret_key, timestamp)
         res = requests.post(question_url, headers=headers, data=get_post_json_data(data))
@@ -32,6 +33,7 @@ class TacTask:
     def send_feedback(self, timestamp):
         data = tac_service.get_feedback(timestamp)
         if len(data) == 0:
+            print('TAC信息反馈未发现数据')
             return
         headers = gen_headers(app_id, secret_key, timestamp)
         res = requests.post(feedback_url, headers=headers, data=get_post_json_data(data))
@@ -41,6 +43,7 @@ class TacTask:
     def send_repair(self, timestamp):
         data = tac_service.get_repair(timestamp)
         if len(data) == 0:
+            print('TAC维修通讯案例未发现数据')
             return
         headers = gen_headers(app_id, secret_key, timestamp)
         res = requests.post(repair_url, headers=headers, data=get_post_json_data(data))

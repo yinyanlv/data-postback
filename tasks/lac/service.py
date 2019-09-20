@@ -13,7 +13,7 @@ class LacService:
 
     def get_question(self, timestamp):
         day_time_range = get_day_time_range(timestamp)
-        lac_cursor.execute(self.question_sql, [day_time_range['begin'], day_time_range['end']])
+        lac_cursor.execute(self.question_sql.decode('utf-8'), [day_time_range['begin'], day_time_range['end']])
         fields = [lower_first_letter(desc_row[0]) for desc_row in lac_cursor.description]
         data = rebuild_data(lac_cursor, fields)
         return data

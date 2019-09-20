@@ -7,14 +7,15 @@ FROM (SELECT R.*
       FROM (SELECT RB.ID                                 AS "tisMid",
                    RB.CODE                               AS "code",
                    RB.TITLE                              AS "title",
-                   TO_NCHAR(SUBSTR(RB.CONTENT, 1, 2000)) AS "content",
+                   TO_NCHAR(NVL(SUBSTR(RB.CONTENT, 1, 2000),' ')) AS "content",
                    M.NAME                                AS "modelName",
                    ME.NAME                               AS "codeName"
             FROM T_RB RB
                    JOIN T_MODEL M ON RB.MODEL_ID = M.ID
                    JOIN T_MODULE ME ON RB.MODULE_ID = ME.ID
-            WHERE RB.CREATED_DATE >= TO_DATE(:begin, 'yyyy-mm-dd hh24:mi:ss')
-              AND RB.CREATED_DATE <= TO_DATE(:end, 'yyyy-mm-dd hh24:mi:ss')) R) RB
+            WHERE RB.STATUS = 'PUBLISHED'
+              AND RB.PUBLISHED_DATE >= TO_DATE(:begin, 'yyyy-mm-dd hh24:mi:ss')
+              AND RB.PUBLISHED_DATE <= TO_DATE(:end, 'yyyy-mm-dd hh24:mi:ss')) R) RB
        LEFT JOIN (SELECT T_RB_REPLACED.RB_ID, TO_NCHAR(SUBSTR(WMSYS.WM_CONCAT(T_RB.CODE), 1, 2000)) REPLACED_RB_CODES
                   FROM T_RB_REPLACED
                          LEFT JOIN T_RB ON T_RB_REPLACED.REPLACED_RB_ID = T_RB.ID
